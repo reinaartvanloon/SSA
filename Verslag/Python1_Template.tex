@@ -418,16 +418,13 @@ not WSS?
 
 If WSS:
 
-Its mean is constant and finite : \$ ; ; ; m\_x (k) = m\_x \textless{}
-\infty \$\\
-The variance is fintite and for a complex stochastic process
-non-negative for: \$ ; ; ; c\_x (0) \textless{} \infty  ; ; ; ; \& ; ; ;
-; r\_x(0) \geq 0\$\\
+Its mean is constant and finite : \$m\_x (k) = m\_x \textless{}
+\infty \$ The variance is fintite and for a complex stochastic process
+non-negative for: 1. \(c_x (0) < \infty\) 2. \$ r\_x(0) \geq 0\$
 
 If not WSS:
 
-Its mean depends on the index: so \$ ; ; ; m\_x (k) ; ; not ; always ; ;
-m\_x (k+l)\$\\
+Its mean depends on the index: so \(m_x (k)\) not always \(m_x (k+l)\)
 Variance can be infinite
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
@@ -1051,7 +1048,7 @@ histograms at the top, whith the smaller \(L\)-values, deviate more from
 an ideal Gaussian distribution
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{17}{\boxspacing}
+\prompt{In}{incolor}{16}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{N} \PY{o}{=} \PY{l+m+mi}{10}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{5}
 
@@ -1129,7 +1126,7 @@ constant value (it still has minor deviations) . Therefore, it seems the
 autocorrelation does not really depend on the time (the value \(k\)).
 
     \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
-\prompt{In}{incolor}{18}{\boxspacing}
+\prompt{In}{incolor}{17}{\boxspacing}
 \begin{Verbatim}[commandchars=\\\{\}]
 \PY{n}{L} \PY{o}{=} \PY{l+m+mi}{2500}
 \PY{n}{h2} \PY{o}{=} \PY{l+m+mi}{500}
@@ -1138,40 +1135,22 @@ autocorrelation does not really depend on the time (the value \(k\)).
 
 \PY{n}{Rx} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n}{L}\PY{p}{,}\PY{n}{h}\PY{p}{)}\PY{p}{)}
 
-\PY{c+c1}{\PYZsh{}print((x[0:h,:]*x[h2:int(10**5),:]).shape)}
-
 \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{n}{L}\PY{p}{)}\PY{p}{:}
     \PY{n}{Rx}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{=} \PY{n}{x}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{:}\PY{n}{h}\PY{p}{,}\PY{n}{i}\PY{p}{]}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{conj}\PY{p}{(}\PY{n}{x}\PY{p}{[}\PY{n}{h2}\PY{p}{:}\PY{n}{h}\PY{o}{+}\PY{n}{h2}\PY{p}{,}\PY{n}{i}\PY{p}{]}\PY{p}{)}
-    
-\PY{n+nb}{print}\PY{p}{(}\PY{n}{Rx}\PY{o}{.}\PY{n}{shape}\PY{p}{)}    
 
 \PY{n}{Rx\PYZus{}mean} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{Rx}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
-
-\PY{n}{Rx} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{average}\PY{p}{(}\PY{n}{x}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{:}\PY{n}{h}\PY{p}{,}\PY{p}{:}\PY{p}{]}\PY{o}{*}\PY{n}{x}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{:}\PY{n}{h}\PY{p}{,}\PY{p}{:}\PY{p}{]}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
-    
-
+ 
  
 \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{l+m+mi}{11}\PY{p}{)}
 \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{Rx\PYZus{}mean}\PY{p}{)}
-\PY{c+c1}{\PYZsh{}plt.plot(t[0:h], Rx, label=r\PYZsq{}\PYZdl{}r\PYZus{}x(k,k+500)\PYZdl{}\PYZsq{})}
-\PY{c+c1}{\PYZsh{}plt.plot(sigma\PYZus{}x[2]**2, label=r\PYZsq{}\PYZdl{}\PYZbs{}hat\PYZob{}\PYZbs{}sigma\PYZus{}x\PYZcb{}\PYZca{}2\PYZdl{} with \PYZdl{}L=2500\PYZdl{}\PYZsq{})}
 \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Time}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
 \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Auto\PYZhy{}correlation}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-\PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
 \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
 \end{tcolorbox}
 
-    \begin{Verbatim}[commandchars=\\\{\}]
-(2500, 99500)
-    \end{Verbatim}
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-No handles with labels found to put in legend.
-    \end{Verbatim}
-
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_46_2.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_46_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
