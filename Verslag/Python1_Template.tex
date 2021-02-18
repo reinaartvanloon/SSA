@@ -1,0 +1,1202 @@
+\documentclass[11pt]{article}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+    \usepackage{iftex}
+    \ifPDFTeX
+    	\usepackage[T1]{fontenc}
+    	\usepackage{mathpazo}
+    \else
+    	\usepackage{fontspec}
+    \fi
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{Python1\_Template}
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@fm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sa\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@dl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb. 
+    \makeatletter
+        \newbox\Wrappedcontinuationbox 
+        \newbox\Wrappedvisiblespacebox 
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}} 
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}} 
+        \newcommand*\Wrappedcontinuationindent {3ex } 
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox} 
+        % Take advantage of the already applied Pygments mark-up to insert 
+        % potential linebreaks for TeX processing. 
+        %        {, <, #, %, $, ' and ": go to next line. 
+        %        _, }, ^, &, >, - and ~: stay at end of broken line. 
+        % Use of \textquotesingle for straight quote. 
+        \newcommand*\Wrappedbreaksatspecials {% 
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}% 
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}% 
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}% 
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}% 
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}% 
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}% 
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}% 
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}% 
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}% 
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}% 
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}% 
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}% 
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}% 
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}% 
+        } 
+        % Some characters . , ; ? ! / are not pygmentized. 
+        % This macro makes them "active" and they will insert potential linebreaks 
+        \newcommand*\Wrappedbreaksatpunct {% 
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}% 
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}% 
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}% 
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}% 
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}% 
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}% 
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}% 
+            \catcode`\.\active
+            \catcode`\,\active 
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active 
+            \lccode`\~`\~ 	
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+        
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active 	
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+    
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    
+    \hypertarget{sc3011tn---stochastische-signaalanalyse---20202021}{%
+\section{SC3011TN - Stochastische Signaalanalyse -
+2020/2021}\label{sc3011tn---stochastische-signaalanalyse---20202021}}
+
+    \hypertarget{group-details}{%
+\section{Group details}\label{group-details}}
+
+\textbf{Group number}: \ldots{}
+
+\textbf{Student 1}:
+
+\begin{verbatim}
+ Name: Jeroen Sangers
+ 
+ Student number: 4645197
+\end{verbatim}
+
+\textbf{Student 2}:
+
+\begin{verbatim}
+ Name: Reinaart van Loon 
+ 
+ Student number: 4914058
+\end{verbatim}
+
+\textbf{Date of completion}: February 18th
+
+    \hypertarget{question-1}{%
+\subsection{Question 1}\label{question-1}}
+
+If the random process \(x(k)\) in (1.1) is wide-sense stationary (WSS),
+what can you say about its mean and variance? And what if the process is
+not WSS?
+
+    \hypertarget{answer-1}{%
+\subsubsection{Answer 1}\label{answer-1}}
+
+If WSS:
+
+Its mean is constant and finite : \$ ; ; ; m\_x (k) = m\_x \textless{}
+\infty \$\\
+The variance is fintite and for a complex stochastic process
+non-negative for: \$ ; ; ; c\_x (0) \textless{} \infty  ; ; ; ; \& ; ; ;
+; r\_x(0) \geq 0\$\\
+
+If not WSS:
+
+Its mean depends on the index: so \$ ; ; ; m\_x (k) ; ; not ; always ; ;
+m\_x (k+l)\$\\
+Variance can be infinite
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{1}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Import packages}
+\PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+\PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+\PY{k+kn}{import} \PY{n+nn}{scipy} \PY{k}{as} \PY{n+nn}{sci}
+\PY{k+kn}{from} \PY{n+nn}{tqdm} \PY{k+kn}{import} \PY{n}{tqdm}
+\PY{k+kn}{from} \PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{optimize} \PY{k+kn}{import} \PY{n}{least\PYZus{}squares}
+
+\PY{c+c1}{\PYZsh{} Initiate random seed for reproducible results}
+\PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{seed}\PY{p}{(}\PY{l+m+mi}{2021}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Constants (Table 2.1 of the assignment text)}
+\PY{n}{N} \PY{o}{=} \PY{l+m+mf}{1e5}                       \PY{c+c1}{\PYZsh{} Number of samples}
+\PY{n}{dt} \PY{o}{=} \PY{l+m+mf}{1e\PYZhy{}3}                     \PY{c+c1}{\PYZsh{} Sampling period}
+\PY{n}{m} \PY{o}{=} \PY{l+m+mf}{0.01}                      \PY{c+c1}{\PYZsh{} Mass of the black hole}
+\PY{n}{a} \PY{o}{=} \PY{l+m+mi}{3}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{pi}\PY{o}{/}\PY{l+m+mi}{16}                \PY{c+c1}{\PYZsh{} Plummer radius}
+\PY{n}{b\PYZus{}max} \PY{o}{=} \PY{n}{a}                     \PY{c+c1}{\PYZsh{} Maximum impact parameter}
+\PY{n}{G} \PY{o}{=} \PY{l+m+mi}{1}                         \PY{c+c1}{\PYZsh{} Normalized gravitational constant}
+\PY{n}{M} \PY{o}{=} \PY{l+m+mi}{1}                         \PY{c+c1}{\PYZsh{} Normalized total cluster mass}
+\PY{n}{V\PYZus{}0} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{G}\PY{o}{*}\PY{n}{M}\PY{o}{/}\PY{p}{(}\PY{l+m+mi}{2}\PY{o}{*}\PY{n}{a}\PY{p}{)}\PY{p}{)}      \PY{c+c1}{\PYZsh{} Relative velocity with interacting stars}
+\PY{n}{Lambda} \PY{o}{=} \PY{n}{b\PYZus{}max}\PY{o}{*}\PY{n}{V\PYZus{}0}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{o}{/}\PY{p}{(}\PY{n}{G}\PY{o}{*}\PY{n}{m}\PY{p}{)}   \PY{c+c1}{\PYZsh{} Coulomb logarithm factor}
+\PY{n}{c} \PY{o}{=} \PY{n}{G}\PY{o}{*}\PY{n}{M}\PY{o}{*}\PY{n}{m}\PY{o}{/}\PY{n}{a}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{3}                \PY{c+c1}{\PYZsh{} Spring constant}
+\PY{n}{gamma} \PY{o}{=} \PY{l+m+mi}{128}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{)}\PY{o}{/}\PY{p}{(}\PY{l+m+mi}{7}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{pi}\PY{p}{)} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{G}\PY{o}{/}\PY{p}{(}\PY{n}{M}\PY{o}{*}\PY{n}{a}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{3}\PY{p}{)}\PY{p}{)} \PY{o}{*} \PY{n}{m}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{n}{Lambda}\PY{p}{)} \PY{c+c1}{\PYZsh{} Friction coefficient}
+\end{Verbatim}
+\end{tcolorbox}
+
+    As the number of interacting stars \(N_{\text{star}}\), fill in the
+first 5 digits of the student number of Student 1
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{N\PYZus{}star} \PY{o}{=} \PY{l+m+mi}{46451}   \PY{c+c1}{\PYZsh{} First 5 digits of student number of Student 1; number of interacting stars}
+\PY{n}{m\PYZus{}star} \PY{o}{=} \PY{n}{M}\PY{o}{/}\PY{n}{N\PYZus{}star} \PY{c+c1}{\PYZsh{} Mass of an individual interacting star}
+\PY{n}{R} \PY{o}{=} \PY{l+m+mi}{4}\PY{o}{*}\PY{n}{G}\PY{o}{*}\PY{n}{M}\PY{o}{*}\PY{n}{m\PYZus{}star}\PY{o}{*}\PY{n}{gamma}\PY{o}{/}\PY{p}{(}\PY{l+m+mi}{9}\PY{o}{*}\PY{n}{a}\PY{p}{)} \PY{c+c1}{\PYZsh{} Noise factor}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{question-2}{%
+\subsection{Question 2}\label{question-2}}
+
+Let \(x(k)\) be the discrete-time representation of the position of the
+black hole, with \(t = k\Delta t\). Derive the discrete-time dynamics of
+\(x(k)\). That is, find the parameters \(\beta_1, \beta_2, \beta_3\) in
+the following second order difference equation:
+
+\[x(k)+\beta_1 \cdot x(k-1)+\beta_2 \cdot x(k-2) = \beta_3 \cdot \tilde w(k)\]
+
+Use Euler's backward approximation to approximate the derivative
+operator \(\frac{d(.)}{dt}\) and second order derivative operator
+\(\frac{d^2(.)}{d^2t}\) in (1.1). Subsequently replace the white noise
+signal \(w(t)\) by a discrete white noise sequence as outlined in
+Section 1.3.
+
+\hypertarget{provide}{%
+\subsubsection{Provide:}\label{provide}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Analytical expressions for the parameters
+  \(\beta_1, \beta_2, \beta_3\)
+\item
+  Their numerical values, by making use of the data given in Table 2.1
+\end{enumerate}
+
+    \hypertarget{answer-2}{%
+\subsubsection{Answer 2}\label{answer-2}}
+
+\(\beta_1 = -\frac{2m+\gamma \Delta t }{m + \gamma \Delta t + c \Delta t^2}\)
+
+\(\beta_2 = \frac{m}{m + \gamma \Delta t + c \Delta t^2}\)
+
+\$\beta\_3 =
+\frac{\sqrt{R} \Delta t^\frac{3}{2}}{m + \gamma \Delta t + c \Delta t^{2}}
+\$
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{b1} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{p}{(}\PY{l+m+mi}{2}\PY{o}{*}\PY{n}{m} \PY{o}{+} \PY{n}{gamma}\PY{o}{*}\PY{n}{dt}\PY{p}{)}\PY{o}{/}\PY{p}{(}\PY{n}{m}\PY{o}{+}\PY{n}{gamma}\PY{o}{*}\PY{n}{dt}\PY{o}{+}\PY{n}{c}\PY{o}{*}\PY{n}{dt}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}
+\PY{n}{b2} \PY{o}{=} \PY{n}{m}\PY{o}{/}\PY{p}{(}\PY{n}{m}\PY{o}{+}\PY{n}{gamma}\PY{o}{*}\PY{n}{dt}\PY{o}{+}\PY{n}{c}\PY{o}{*}\PY{n}{dt}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}
+\PY{n}{b3} \PY{o}{=} \PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{R}\PY{p}{)}\PY{o}{*}\PY{n}{dt}\PY{o}{*}\PY{o}{*}\PY{p}{(}\PY{l+m+mf}{1.5}\PY{p}{)}\PY{p}{)}\PY{o}{/}\PY{p}{(}\PY{n}{m}\PY{o}{+}\PY{n}{gamma}\PY{o}{*}\PY{n}{dt}\PY{o}{+}\PY{n}{c}\PY{o}{*}\PY{n}{dt}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{question-3}{%
+\subsection{Question 3}\label{question-3}}
+
+Analyze the stochastic discrete-time dynamics in the z-domain.
+Specifically, answer the following questions: 1. Using the z-transform,
+determine the transfer function \(H(z)\) from \(\tilde{w}\) to \(x\) of
+the discrete-time dynamical system described by difference equation
+(2.1). 2. Determine the poles of \(H(z)\). 3. Is this system (BIBO)
+stable? Use Definition 2.5 or Lemma 2.6 on page 24 of the reader.
+
+    \hypertarget{answer-3}{%
+\subsubsection{Answer 3}\label{answer-3}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \$ H(z) = \frac{\beta_3}{1+\beta_1 z^{-1} + \beta_2 z^{-2}} \$
+\item
+  \$ p\_1 = 0,99963\ldots{} + 0.00218\ldots{}j \$\\
+  \$ p\_2 = 0,99963\ldots{} - 0.00218\ldots{}j \$
+\item
+  We are looking at a causal system (only past and present values are
+  used in difference function 2.1) and both poles are inside the unit
+  circle, so R.O.C. includes the unit circle. Therefore, the system is
+  stable and therefore BIBO stable.
+\end{enumerate}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{}\PYZsh{}\PYZsh{} Calculation cell }
+\PY{k+kn}{import} \PY{n+nn}{cmath}
+\PY{n}{z\PYZus{}1} \PY{o}{=} \PY{l+m+mi}{1}\PY{n}{j}\PY{o}{+}\PY{l+m+mi}{1}
+\PY{n}{z\PYZus{}2} \PY{o}{=} \PY{l+m+mi}{1}\PY{n}{j}\PY{o}{+}\PY{l+m+mi}{1}
+
+\PY{n}{z\PYZus{}1} \PY{o}{=} \PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{b1}\PY{o}{+}\PY{n}{cmath}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{b1}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{o}{\PYZhy{}}\PY{l+m+mi}{4}\PY{o}{*}\PY{n}{b2}\PY{p}{)}\PY{p}{)}\PY{o}{/}\PY{l+m+mi}{2}
+\PY{n}{z\PYZus{}2} \PY{o}{=} \PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{b1}\PY{o}{\PYZhy{}}\PY{n}{cmath}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{b1}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{o}{\PYZhy{}}\PY{l+m+mi}{4}\PY{o}{*}\PY{n}{b2}\PY{p}{)}\PY{p}{)}\PY{o}{/}\PY{l+m+mi}{2}
+
+\PY{n}{r} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{real}\PY{p}{(}\PY{n}{z\PYZus{}2}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2} \PY{o}{+} \PY{n}{np}\PY{o}{.}\PY{n}{imag}\PY{p}{(}\PY{n}{z\PYZus{}2}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \hypertarget{question-4}{%
+\subsection{Question 4}\label{question-4}}
+
+Simulate a single realization of the trajectory of the black hole. That
+is, simulate the difference equation (2.1) for \(k = 3,\cdots,N\) with
+\(N = 5000\) using the initial conditions \$x(1) = x(2) = 0 \$. Hereby
+you should generate discrete white noise samples using the
+\textbf{Numpy} command
+\href{https://docs.scipy.org/doc/numpy-1.15.0/reference/generated/numpy.random.normal.html}{\texttt{np.random.normal(size=N)}}
+
+\hypertarget{provide}{%
+\subsubsection{Provide:}\label{provide}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Python code to generate \(N\) samples of \(x(k)\)
+\item
+  Plot a realization of one sequence \(x(k)\)
+\item
+  Explain the results. Do the results agree with your analysis in
+  Question 3?
+\end{enumerate}
+
+    \hypertarget{answer-4}{%
+\subsubsection{Answer 4}\label{answer-4}}
+
+Yes, it seems stable since the displacement doesn't diverge. Also, it
+seems to keep oscilalting around zero, as if there is a restoring force.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{N} \PY{o}{=} \PY{l+m+mi}{5000}
+
+\PY{n}{x} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{empty}\PY{p}{(}\PY{n}{N}\PY{p}{)}
+\PY{n}{x}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{=}\PY{l+m+mi}{0}
+\PY{n}{x}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{=}\PY{l+m+mi}{0}
+
+\PY{n}{w} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{normal}\PY{p}{(}\PY{n}{size}\PY{o}{=}\PY{n}{N}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Simulate the difference equation:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{for} \PY{n}{k} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{N}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{:}
+    \PY{n}{x}\PY{p}{[}\PY{n}{k}\PY{o}{+}\PY{l+m+mi}{2}\PY{p}{]} \PY{o}{=} \PY{n}{b3}\PY{o}{*}\PY{n}{w}\PY{p}{[}\PY{n}{k}\PY{o}{+}\PY{l+m+mi}{2}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{b2}\PY{o}{*}\PY{n}{x}\PY{p}{[}\PY{n}{k}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{b1}\PY{o}{*}\PY{n}{x}\PY{p}{[}\PY{n}{k}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Plot the results:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{n}{N}\PY{p}{)}\PY{o}{*}\PY{n}{dt}\PY{p}{,}\PY{n}{x}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Time}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Displacement}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_19_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \hypertarget{question-5}{%
+\subsection{Question 5}\label{question-5}}
+
+In Question 4, you generated one realization of the trajectory of the
+black hole. To formalize this, let us denote the realization generated
+in Question 4 as \(x(k,\lambda)\) for \(\lambda = 1\) and the
+corresponding white noise sequence as \(\tilde{w}(k,1)\).
+
+Now, simulate multiple realizations of the trajectory of the black hole.
+Specifically, generate \(L\) realizations \(x(k,\lambda)\) for
+\(\lambda = 1,\cdots,L\), with each realization generated for a
+different realization of the discrete time white noise sequence
+\(\tilde{w}(k,\lambda)\).
+
+NB. You may overwrite the realization generated in Question 4.
+
+\hypertarget{provide}{%
+\subsubsection{Provide:}\label{provide}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Python script used to generate \(L\) realizations \(x(k,\lambda)\)
+  sequences
+\item
+  Plot of all \(L\) realizations for \(L = 50\)
+\item
+  Explain the results. Do the results agree with your analysis in
+  Question 3?
+\end{enumerate}
+
+    \hypertarget{answer-5}{%
+\subsubsection{Answer 5}\label{answer-5}}
+
+Again it seems stable since the cluster of realizations is around the
+horizontal axis with a displacement of 0. Therefore, the system doesn't
+seem to diverge.
+
+Also, there seems to be a restoring force that stimulates oscillation.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{L} \PY{o}{=} \PY{l+m+mi}{50}
+\PY{n}{x} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n}{N}\PY{p}{,}\PY{n}{L}\PY{p}{)}\PY{p}{)}
+\PY{n}{w} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{normal}\PY{p}{(}\PY{n}{size}\PY{o}{=}\PY{p}{(}\PY{n}{N}\PY{p}{,}\PY{n}{L}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Perform L realizations of the difference equation
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{for} \PY{n}{k} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{N}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{:}
+    \PY{n}{x}\PY{p}{[}\PY{n}{k}\PY{o}{+}\PY{l+m+mi}{2}\PY{p}{,}\PY{p}{:}\PY{p}{]} \PY{o}{=} \PY{n}{b3}\PY{o}{*}\PY{n}{w}\PY{p}{[}\PY{n}{k}\PY{o}{+}\PY{l+m+mi}{2}\PY{p}{,}\PY{p}{:}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{b2}\PY{o}{*}\PY{n}{x}\PY{p}{[}\PY{n}{k}\PY{p}{,}\PY{p}{:}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{b1}\PY{o}{*}\PY{n}{x}\PY{p}{[}\PY{n}{k}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{,}\PY{p}{:}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Plot the results
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{n}{N}\PY{p}{)}\PY{o}{*}\PY{n}{dt}\PY{p}{,}\PY{n}{x}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Time}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Displacement}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}
+\end{Verbatim}
+\end{tcolorbox}
+
+            \begin{tcolorbox}[breakable, size=fbox, boxrule=.5pt, pad at break*=1mm, opacityfill=0]
+\prompt{Out}{outcolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+<function matplotlib.pyplot.show(close=None, block=None)>
+\end{Verbatim}
+\end{tcolorbox}
+        
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_26_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \hypertarget{question-6}{%
+\subsection{Question 6}\label{question-6}}
+
+\textbf{NB: Make sure your computer has enough memory / try small L
+values first!}
+
+Now, simulate even more realizations of the trajectory of the black
+hole.
+
+Increase \(L\), as defined in Question 5, to respectively
+\(L = 100, \ 500, \ 2500\). For each value of \(L\), obtain all
+realizations at time steps \(k = 10^3\), \(k = 10^4\) and \(k = 10^5\).
+That is, find
+\(\{x(10^3,\lambda)\}_{\lambda = 1}^L, \ \{x(10^4,\lambda)\}_{\lambda = 1}^L, \ \{x(10^5,\lambda)\}_{\lambda = 1}^L\).
+
+Using this data, generate histograms with \textbf{python} command
+\texttt{matplotlib.pyplot.hist()}, for each combination of time
+\(k = 10^3,10^4,10^5\) and amount of realizations
+\(L = 100, \ 500, \ 2500\). Your answer should thus consist of \(9\)
+histograms. The number of bins in each histogram should be equal to
+\(\sqrt{L}\).
+
+\hypertarget{provide}{%
+\subsubsection{Provide:}\label{provide}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  One figure containing the 9 histograms. Make sure the figure has no
+  overlapping text!
+\item
+  Comment on your results.
+\end{enumerate}
+
+    \hypertarget{answer-6}{%
+\subsubsection{Answer 6}\label{answer-6}}
+
+The further we go in time (graphs further to the RHS), the variance
+becomes larger. This is seen by a more spreaded histogram.
+
+The more realizations we use (graphs further down), the histograms
+converge to a smoother curve.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{11}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{Ls} \PY{o}{=}  \PY{n}{np}\PY{o}{.}\PY{n}{asarray}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{100}\PY{p}{,}\PY{l+m+mi}{500}\PY{p}{,}\PY{l+m+mi}{2500}\PY{p}{]}\PY{p}{)} \PY{c+c1}{\PYZsh{} Array containing realization instances (i.e. 100, 500, 2500)}
+\PY{n}{Ns} \PY{o}{=}  \PY{n}{np}\PY{o}{.}\PY{n}{asarray}\PY{p}{(}\PY{p}{[}\PY{l+m+mf}{1e3}\PY{p}{,}\PY{l+m+mf}{1e4}\PY{p}{,}\PY{l+m+mf}{1e5}\PY{p}{]}\PY{p}{)}   \PY{c+c1}{\PYZsh{} Array containing time instances (i.e. 1e3, 1e4, 1e5)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Take \(L\) the maximum number of simulations we need to compare (We can
+take subsets for the lower values of L). Recall that \(N\) is the
+maximum number of time steps we need to simulate.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{12}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{L} \PY{o}{=} \PY{n}{Ls}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+\PY{n}{N} \PY{o}{=} \PY{n}{Ns}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+\PY{n}{x} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n+nb}{int}\PY{p}{(}\PY{n}{N}\PY{p}{)}\PY{p}{,}\PY{n}{L}\PY{p}{)}\PY{p}{)}
+\PY{n}{w} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{normal}\PY{p}{(}\PY{n}{size}\PY{o}{=}\PY{p}{(}\PY{n+nb}{int}\PY{p}{(}\PY{n}{N}\PY{p}{)}\PY{p}{,}\PY{n}{L}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Simulate the difference equation \(L\) times. Depending on your hardware
+and code, this step could take 10-15 min.
+
+NB. You can also vectorize the below computations instead of using a
+loop and use numpy operations to significantly speed up computations on
+arrays.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{13}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{for} \PY{n}{k} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{int}\PY{p}{(}\PY{n}{N}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{:}
+    \PY{n}{x}\PY{p}{[}\PY{n}{k}\PY{o}{+}\PY{l+m+mi}{2}\PY{p}{,}\PY{p}{:}\PY{p}{]} \PY{o}{=} \PY{n}{b3}\PY{o}{*}\PY{n}{w}\PY{p}{[}\PY{n}{k}\PY{o}{+}\PY{l+m+mi}{2}\PY{p}{,}\PY{p}{:}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{b2}\PY{o}{*}\PY{n}{x}\PY{p}{[}\PY{n}{k}\PY{p}{,}\PY{p}{:}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{n}{b1}\PY{o}{*}\PY{n}{x}\PY{p}{[}\PY{n}{k}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{,}\PY{p}{:}\PY{p}{]}
+\end{Verbatim}
+\end{tcolorbox}
+
+    Take different subsets of the data for each combination of \(k\) and
+\(L\) and plot the results as histograms:
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{14}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{fig}\PY{p}{,} \PY{n}{axs} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{,} \PY{n}{figsize} \PY{o}{=} \PY{p}{[}\PY{l+m+mf}{13.8}\PY{p}{,} \PY{l+m+mf}{10.6}\PY{p}{]}\PY{p}{,} \PY{n}{tight\PYZus{}layout} \PY{o}{=} \PY{l+m+mf}{3.0}\PY{p}{)}
+\PY{n}{fig}\PY{o}{.}\PY{n}{autofmt\PYZus{}xdate}\PY{p}{(}\PY{p}{)}
+
+\PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{Ls}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+    \PY{n}{L} \PY{o}{=} \PY{n}{Ls}\PY{p}{[}\PY{n}{i}\PY{p}{]}
+    \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{Ns}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+        \PY{n}{h} \PY{o}{=} \PY{n}{Ns}\PY{p}{[}\PY{n}{j}\PY{p}{]}
+        \PY{n}{axs}\PY{p}{[}\PY{n}{i}\PY{p}{,} \PY{n}{j}\PY{p}{]}\PY{o}{.}\PY{n}{hist}\PY{p}{(}\PY{n}{x}\PY{p}{[}\PY{n+nb}{int}\PY{p}{(}\PY{n}{h}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{:}\PY{n}{L}\PY{p}{]}\PY{p}{,} \PY{n}{bins}\PY{o}{=}\PY{n+nb}{int}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{L}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+        \PY{n}{axs}\PY{p}{[}\PY{n}{i}\PY{p}{,} \PY{n}{j}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ L = }\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s1}{, h=}\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}} \PY{p}{(}\PY{n}{L}\PY{p}{,}\PY{n}{h}\PY{p}{)}\PY{p}{)}
+        \PY{n}{axs}\PY{p}{[}\PY{n}{i}\PY{p}{,} \PY{n}{j}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}xlim}\PY{p}{(}\PY{p}{[}\PY{n}{np}\PY{o}{.}\PY{n}{min}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{max}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_35_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \hypertarget{question-7}{%
+\subsection{Question 7}\label{question-7}}
+
+Fit a Gaussian function, given by
+\(f(\alpha) = \kappa e^{-\frac{\alpha^2}{2\sigma^2}}\), to the \(9\)
+histograms Question 6. For that purpose, denote the center of bin \(i\)
+of the histogram by \(\alpha _i\) and the corresponding height of the
+histogram as \(h(\alpha_i)\). Then solve the following least squares
+optimization problem using the \textbf{scipy} function
+\href{https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.least_squares.html}{\texttt{scipy.optimize.least\_squares()}}
+
+\[ \hat{\kappa}, \ \hat{\sigma} = arg \ min_{\kappa,\sigma} \sum_{i=1}^P \Bigg( h(\alpha_i)-\kappa e^{-\frac{\alpha_i^2}{2\sigma^2}} \Bigg)^2 \]
+
+Hint: You can use the numpy function \texttt{numpy.std} to get an
+estimate of the standard deviation of the random samples
+\(\{x(k,\lambda)\}\). Together with the number of elements in the
+largest bin, you can use this to derive initial estimates of \(\kappa\)
+and \(\sigma\) in the Gaussian function.
+
+\hypertarget{provide}{%
+\subsubsection{Provide:}\label{provide}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Python script reading the random samples and the samples
+  \(h(\alpha _i)\) of the histograms
+\item
+  9 plots of the histograms and the Gaussian fits in one figure. Make
+  sure the figure has no overlapping text!
+\item
+  Comment on your results.
+\end{enumerate}
+
+    \hypertarget{answer-7}{%
+\subsubsection{Answer 7}\label{answer-7}}
+
+The histograms converge to gaussian shapes for more realizations.
+
+The left-bottom graph is closer to the best gaussian fit than the
+right-bottom graph.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{15}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} define functions}
+\PY{k}{def} \PY{n+nf}{model}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{alpha}\PY{p}{)}\PY{p}{:}
+    \PY{l+s+sd}{\PYZsq{}\PYZsq{}\PYZsq{}}
+\PY{l+s+sd}{    Define the Gaussian function}
+\PY{l+s+sd}{    }
+\PY{l+s+sd}{    Inputs:}
+\PY{l+s+sd}{        x: array of fitting parameters (i.e. kappa, sigma)}
+\PY{l+s+sd}{        alpha: coordinate to describe the center of a bin of a histogram}
+\PY{l+s+sd}{    \PYZsq{}\PYZsq{}\PYZsq{}}
+    \PY{n}{gaussian} \PY{o}{=} \PY{n}{x}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{alpha}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{o}{/}\PY{p}{(}\PY{l+m+mi}{2}\PY{o}{*}\PY{n}{x}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{)}
+    \PY{k}{return} \PY{n}{gaussian}
+
+\PY{k}{def} \PY{n+nf}{error}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{alpha}\PY{p}{,} \PY{n}{h}\PY{p}{)}\PY{p}{:} 
+    \PY{l+s+sd}{\PYZsq{}\PYZsq{}\PYZsq{}}
+\PY{l+s+sd}{    Define the difference between the simulated data and the Gaussian function.}
+\PY{l+s+sd}{    That is, the difference between the center of each bin of the histogram and }
+\PY{l+s+sd}{    the corresponding coordinate of the Gaussian density function.}
+\PY{l+s+sd}{    }
+\PY{l+s+sd}{    Inputs:}
+\PY{l+s+sd}{        x: array of fitting parameters (i.e. kappa, sigma)}
+\PY{l+s+sd}{        alpha: coordinate to describe the center of a bin of a histogram}
+\PY{l+s+sd}{        h: height of the histogram at coordinate alpha}
+\PY{l+s+sd}{    \PYZsq{}\PYZsq{}\PYZsq{}}
+    \PY{n}{difference} \PY{o}{=} \PY{n}{h}\PY{o}{\PYZhy{}}\PY{n}{model}\PY{p}{(}\PY{n}{x}\PY{p}{,}\PY{n}{alpha}\PY{p}{)}
+    \PY{k}{return} \PY{n}{difference}
+
+\PY{k}{def} \PY{n+nf}{jac}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{alpha}\PY{p}{,} \PY{n}{h}\PY{p}{)}\PY{p}{:}
+    \PY{l+s+sd}{\PYZsq{}\PYZsq{}\PYZsq{}}
+\PY{l+s+sd}{    Define Jacobian, i.e. the partial derivatives of the difference between the simulated data }
+\PY{l+s+sd}{    and the Gaussian function, with respect to the parameters contained in x.}
+\PY{l+s+sd}{    }
+\PY{l+s+sd}{    Inputs:}
+\PY{l+s+sd}{        x: array of fitting parameters (i.e. kappa, sigma)}
+\PY{l+s+sd}{        alpha: coordinate to describe the center of a bin of a histogram}
+\PY{l+s+sd}{        h: height of the histogram at coordinate alpha}
+\PY{l+s+sd}{    \PYZsq{}\PYZsq{}\PYZsq{}}
+    \PY{n}{J} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{empty}\PY{p}{(}\PY{p}{(}\PY{n}{alpha}\PY{o}{.}\PY{n}{size}\PY{p}{,} \PY{n}{x}\PY{o}{.}\PY{n}{size}\PY{p}{)}\PY{p}{)}
+    \PY{n}{J}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{alpha}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{o}{/}\PY{p}{(}\PY{l+m+mi}{2}\PY{o}{*}\PY{n}{x}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{)}
+    \PY{n}{J}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{n}{alpha}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{o}{*}\PY{n}{x}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{/}\PY{p}{(}\PY{n}{x}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{3}\PY{p}{)}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{alpha}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{o}{/}\PY{p}{(}\PY{l+m+mi}{2}\PY{o}{*}\PY{n}{x}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{)}
+    \PY{k}{return} \PY{n}{J}
+
+\PY{c+c1}{\PYZsh{} Make figure that shows histograms}
+\PY{n}{fit\PYZus{}parameters} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{,} \PY{n+nb}{len}\PY{p}{(}\PY{n}{Ls}\PY{p}{)}\PY{p}{,} \PY{n+nb}{len}\PY{p}{(}\PY{n}{Ns}\PY{p}{)}\PY{p}{]}\PY{p}{)}
+
+\PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{Ls}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+    \PY{n}{L} \PY{o}{=} \PY{n}{Ls}\PY{p}{[}\PY{n}{i}\PY{p}{]}   
+    
+    \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{Ns}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+        \PY{n}{h} \PY{o}{=} \PY{n}{Ns}\PY{p}{[}\PY{n}{j}\PY{p}{]}     
+        
+        \PY{c+c1}{\PYZsh{} Repeat hist command to get the data, the command gives bin edges}
+        \PY{c+c1}{\PYZsh{} But you need the centers}
+        \PY{p}{[}\PY{n}{counts}\PY{p}{,} \PY{n}{edges}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{histogram}\PY{p}{(}\PY{n}{x}\PY{p}{[}\PY{n+nb}{int}\PY{p}{(}\PY{n}{h}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{:}\PY{n}{L}\PY{p}{]}\PY{p}{,} \PY{n}{bins}\PY{o}{=}\PY{n+nb}{int}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{L}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+        \PY{n}{centers} \PY{o}{=} \PY{p}{(}\PY{n}{edges}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{:}\PY{p}{]}\PY{o}{+}\PY{n}{edges}\PY{p}{[}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{o}{/}\PY{l+m+mi}{2}
+        
+        \PY{c+c1}{\PYZsh{} Calculate initial estimates of sigma and kappa}
+        \PY{n}{sigma0} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{n}{x}\PY{p}{[}\PY{n+nb}{int}\PY{p}{(}\PY{n}{h}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,}\PY{p}{:}\PY{n}{L}\PY{p}{]}\PY{p}{)}
+        \PY{n}{kappa0} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{amax}\PY{p}{(}\PY{n}{counts}\PY{p}{)}
+        \PY{n}{x0} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{n}{kappa0}\PY{p}{,} \PY{n}{sigma0}\PY{p}{]}\PY{p}{)}
+        
+        \PY{c+c1}{\PYZsh{} Fit the Gaussian through the histogram data and save into array}
+        \PY{n}{p\PYZus{}opt} \PY{o}{=} \PY{n}{least\PYZus{}squares}\PY{p}{(}\PY{n}{error}\PY{p}{,} 
+                              \PY{n}{x0}\PY{p}{,} 
+                              \PY{n}{jac} \PY{o}{=} \PY{n}{jac}\PY{p}{,} 
+                              \PY{n}{args} \PY{o}{=} \PY{p}{(}\PY{n}{centers}\PY{p}{,} \PY{n}{counts}\PY{p}{)}\PY{p}{)}\PY{p}{;}
+        \PY{n}{fit\PYZus{}parameters}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{n}{i}\PY{p}{,}\PY{n}{j}\PY{p}{]} \PY{o}{=} \PY{n}{p\PYZus{}opt}\PY{o}{.}\PY{n}{x}
+        
+        \PY{c+c1}{\PYZsh{}Plot the Gaussian on top of the histogram}
+        \PY{n}{xg} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{min}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{max}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{,} \PY{l+m+mi}{1000}\PY{p}{)}
+        \PY{n}{yg} \PY{o}{=} \PY{n}{model}\PY{p}{(}\PY{n}{p\PYZus{}opt}\PY{o}{.}\PY{n}{x}\PY{p}{,}\PY{n}{xg}\PY{p}{)}
+        
+        \PY{c+c1}{\PYZsh{}Add the Gaussian fits to the histograms}
+        \PY{n}{axs}\PY{p}{[}\PY{n}{i}\PY{p}{,} \PY{n}{j}\PY{p}{]}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{xg}\PY{p}{,}\PY{n}{yg}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{r}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{n}{axs}\PY{p}{[}\PY{n}{i}\PY{p}{,} \PY{n}{j}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZdl{}}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{hat}\PY{l+s+s1}{\PYZob{}}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{sigma\PYZcb{}\PYZdl{} = }\PY{l+s+si}{\PYZpc{}.2e}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}} \PY{n}{p\PYZus{}opt}\PY{o}{.}\PY{n}{x}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+
+\PY{n}{fig}
+\end{Verbatim}
+\end{tcolorbox}
+ 
+            
+\prompt{Out}{outcolor}{15}{}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_38_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+
+    \hypertarget{question-8}{%
+\section{Question 8}\label{question-8}}
+
+Summarize the results Question 7 in the following table.
+
+The results of Gaussian fits for the random samples
+\(\{x( k,\lambda )\}\) for \(k=10^3, 10^4, 10^5\) and
+\(L = 100, 500, 2500\):
+
+Your answer should contain \(3\) tables (for different values of \(k\))
+in the style of the above table template.
+
+    \hypertarget{answer-8}{%
+\subsubsection{Answer 8}\label{answer-8}}
+
+\(k=10^3\)
+
+\begin{longtable}[]{@{}lcr@{}}
+\toprule
+L & \(\hat{\kappa}\) & \(\hat{\sigma}\)\tabularnewline
+\midrule
+\endhead
+\(50\) & \(20\) & \(9.26 \cdot 10^{-3}\)\tabularnewline
+\(500\) & \(62\) & \(8.94 \cdot 10^{-3}\)\tabularnewline
+\(5000\) & \(154\) & \(9.78 \cdot 10^{-3}\)\tabularnewline
+\bottomrule
+\end{longtable}
+
+\(k=10^4\)
+
+\begin{longtable}[]{@{}lcr@{}}
+\toprule
+L & \(\hat{\kappa}\) & \(\hat{\sigma}\)\tabularnewline
+\midrule
+\endhead
+\(50\) & \(23\) & \(1.33 \cdot 10^{-2}\)\tabularnewline
+\(500\) & \(63\) & \(1.25 \cdot 10^{-2}\)\tabularnewline
+\(5000\) & \(168\) & \(1.27 \cdot 10^{-2}\)\tabularnewline
+\bottomrule
+\end{longtable}
+
+\(k=10^5\)
+
+\begin{longtable}[]{@{}lcr@{}}
+\toprule
+L & \(\hat{\kappa}\) & \(\hat{\sigma}\)\tabularnewline
+\midrule
+\endhead
+\(50\) & \(21\) & \(1.21 \cdot 10^{-2}\)\tabularnewline
+\(500\) & \(55\) & \(1.25 \cdot 10^{-2}\)\tabularnewline
+\(5000\) & \(145\) & \(1.26 \cdot 10^{-2}\)\tabularnewline
+\bottomrule
+\end{longtable}
+
+    \hypertarget{question-9}{%
+\subsection{Question 9}\label{question-9}}
+
+Analyze how the standard deviation of the realizations and Gaussian fits
+is related to time and to the amount of realizations.
+
+\hypertarget{provide}{%
+\subsubsection{Provide:}\label{provide}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Plot \(\hat{\sigma}\) as a function of \(k\), for
+  \(k = \{0,1,...,10^5-1\}\) (i.e.~\(N = 10^5\) time steps).
+\item
+  How does \(\hat{\sigma}\) depend on \(k\)?
+\item
+  How does the Gaussian fit change with respect to \(k\) and \(L\)?
+\end{enumerate}
+
+    \hypertarget{answer-9}{%
+\subsubsection{Answer 9}\label{answer-9}}
+
+Below we plotted the variance \(\hat{\sigma}\) for every timestep \(k\)
+and multiple amounts of realisations \(L\).
+
+\(\hat{\sigma}\) starts of at zero which is to be expected since the
+first values are set to zero, but after quickly rises to a deviation and
+stays approximately constant. Thus after a short amount of time the
+displacements do resemble a Gaussian distribution, which matches what we
+see in the histograms above.
+
+For different amounts of realistation we see that ``spikeyness'' of the
+graph changes, for more realisations the standard deviation of the
+standard deviation of the displacement becomes smaller. THis is why the
+histograms at the top, whith the smaller \(L\)-values, deviate more from
+an ideal Gaussian distribution
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{17}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{N} \PY{o}{=} \PY{l+m+mi}{10}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{5}
+
+\PY{n}{t} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{dt}\PY{o}{*}\PY{n}{N}\PY{p}{,} \PY{n}{N}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{x}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+
+
+\PY{n}{sigma\PYZus{}x} \PY{o}{=} \PY{p}{[}\PY{n}{np}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{n}{x}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{p}{:}\PY{n}{Ls}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{n}{x}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{p}{:}\PY{n}{Ls}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{n}{x}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{p}{:}\PY{n}{Ls}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{]}
+
+\PY{n}{realisation\PYZus{}average} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{average}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+
+
+
+\PY{n}{difference} \PY{o}{=} \PY{n}{x} \PY{o}{\PYZhy{}} \PY{p}{(}\PY{n}{realisation\PYZus{}average}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{ones}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{n}{N}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{o}{.}\PY{n}{T}
+
+\PY{n}{std\PYZus{}dev\PYZus{}sq} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{average}\PY{p}{(}\PY{n}{difference}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{1}\PY{p}{)}
+
+
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{l+m+mi}{6}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{t}\PY{p}{,}\PY{n}{sigma\PYZus{}x}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{L = 100}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{t}\PY{p}{,}\PY{n}{sigma\PYZus{}x}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{L = 500}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{t}\PY{p}{,}\PY{n}{sigma\PYZus{}x}\PY{p}{[}\PY{l+m+mi}{2}\PY{p}{]}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{L = 2500}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Time}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Std. dev. of displacement}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+(100000, 2500)
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_43_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \hypertarget{question-10}{%
+\subsection{Question 10}\label{question-10}}
+
+Analyze the autocorrelation of the process.
+
+\hypertarget{provide}{%
+\subsubsection{Provide:}\label{provide}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  What is the relationship between the standard deviation
+  \(\hat{\sigma}(k)\), autocorrelation \(r_x(k,k)\) and auto-covariance
+  \(c_x(k,k)\)?
+\item
+  Now, calculate the autocorrelation \(r_x(k,k+500)\) for
+  \(k=\{0,1,2,\cdots, 10^5-501\}\) using \(L = 2500\) realizations. Plot
+  the results.
+\item
+  How does \(r_x(k,k+500)\) depend on \(k\)?
+\end{enumerate}
+
+    \hypertarget{answer-10}{%
+\subsubsection{Answer 10}\label{answer-10}}
+
+The following equation was derived: \$ \hat{\sigma} (k)\^{}2 = c\_x(k,k)
+= r\_x(k,k) + m\_x \cdot m\_x\^{}* \$ and since we think the mean of our
+signal is \(0\) they would all be equal. Thus
+\(\hat{\sigma} (k)^2 = c_x(k,k) = r_x(k,k)\)
+
+We see that the autocorrelation very rapidly converges to a virtually
+constant value (it still has minor deviations) . Therefore, it seems the
+autocorrelation does not really depend on the time (the value \(k\)).
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{18}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{n}{L} \PY{o}{=} \PY{l+m+mi}{2500}
+\PY{n}{h2} \PY{o}{=} \PY{l+m+mi}{500}
+\PY{n}{h} \PY{o}{=} \PY{l+m+mi}{10}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{5} \PY{o}{\PYZhy{}} \PY{n}{h2}
+\PY{n}{start} \PY{o}{=} \PY{l+m+mi}{0}
+
+\PY{n}{Rx} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n}{L}\PY{p}{,}\PY{n}{h}\PY{p}{)}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{}print((x[0:h,:]*x[h2:int(10**5),:]).shape)}
+
+\PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{n}{L}\PY{p}{)}\PY{p}{:}
+    \PY{n}{Rx}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{=} \PY{n}{x}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{:}\PY{n}{h}\PY{p}{,}\PY{n}{i}\PY{p}{]}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{conj}\PY{p}{(}\PY{n}{x}\PY{p}{[}\PY{n}{h2}\PY{p}{:}\PY{n}{h}\PY{o}{+}\PY{n}{h2}\PY{p}{,}\PY{n}{i}\PY{p}{]}\PY{p}{)}
+    
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{Rx}\PY{o}{.}\PY{n}{shape}\PY{p}{)}    
+
+\PY{n}{Rx\PYZus{}mean} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{Rx}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+
+\PY{n}{Rx} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{average}\PY{p}{(}\PY{n}{x}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{:}\PY{n}{h}\PY{p}{,}\PY{p}{:}\PY{p}{]}\PY{o}{*}\PY{n}{x}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{:}\PY{n}{h}\PY{p}{,}\PY{p}{:}\PY{p}{]}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+    
+
+ 
+\PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{l+m+mi}{11}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{Rx\PYZus{}mean}\PY{p}{)}
+\PY{c+c1}{\PYZsh{}plt.plot(t[0:h], Rx, label=r\PYZsq{}\PYZdl{}r\PYZus{}x(k,k+500)\PYZdl{}\PYZsq{})}
+\PY{c+c1}{\PYZsh{}plt.plot(sigma\PYZus{}x[2]**2, label=r\PYZsq{}\PYZdl{}\PYZbs{}hat\PYZob{}\PYZbs{}sigma\PYZus{}x\PYZcb{}\PYZca{}2\PYZdl{} with \PYZdl{}L=2500\PYZdl{}\PYZsq{})}
+\PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Time}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Auto\PYZhy{}correlation}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+(2500, 99500)
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+No handles with labels found to put in legend.
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_46_2.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \hypertarget{question-11}{%
+\subsection{Question 11}\label{question-11}}
+
+Using the results obtained so far, what can you conclude regarding wide
+sense stationarity (WSS) of the random process?
+
+    \hypertarget{answer-11}{%
+\subsubsection{Answer 11}\label{answer-11}}
+
+Since our data-set is finite we can not be certain but from the graphs
+we draw the following conclusions: 1. Our mean is virtually zero since
+our deviation squared is equal to the autocorrelation
+\(\hat{\sigma}(k)^2 = r_x(k,k)\). 2. As can be seen in the graph
+relating to question 10, our autocorrelation is (virtually) constant
+after a time. 3. In question 9 we see that the variance is (virtually)
+constant and finite after a time.
+
+So we think that our signal \(x(n)\) is WSS.
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}
